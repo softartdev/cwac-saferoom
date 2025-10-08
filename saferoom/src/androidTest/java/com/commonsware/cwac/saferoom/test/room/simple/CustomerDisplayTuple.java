@@ -14,12 +14,13 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class CustomerDisplayTuple {
-  public final String id;
-  public final String displayName;
+    public final String id;
+    public final String displayName;
 
-  public CustomerDisplayTuple(String id, String displayName) {
-    this.id=id;
-    this.displayName=displayName;
-  }
+    public CustomerDisplayTuple(String id, String displayName) {
+        this.id = id;
+        this.displayName = displayName;
+    }
 }

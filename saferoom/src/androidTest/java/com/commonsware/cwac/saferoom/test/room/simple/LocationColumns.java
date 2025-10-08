@@ -14,12 +14,13 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class LocationColumns {
-  public final double latitude;
-  public final double longitude;
+    public final double latitude;
+    public final double longitude;
 
-  public LocationColumns(double latitude, double longitude) {
-    this.latitude=latitude;
-    this.longitude=longitude;
-  }
+    public LocationColumns(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

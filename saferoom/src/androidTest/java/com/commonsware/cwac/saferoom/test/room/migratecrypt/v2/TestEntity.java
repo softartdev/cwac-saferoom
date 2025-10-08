@@ -6,16 +6,17 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
+@SuppressWarnings("ClassCanBeRecord")
 public class TestEntity {
-  @PrimaryKey
-  @NonNull
-  public final String id;
+    @PrimaryKey
+    @NonNull
+    public final String id;
 
-  @Nullable
-  public final Integer value;
+    @Nullable
+    public final Integer value;
 
-  public TestEntity(String id, Integer value) {
-    this.id = id;
-    this.value = value;
-  }
+    public TestEntity(@NonNull String id, @Nullable Integer value) {
+        this.id = id;
+        this.value = value;
+    }
 }

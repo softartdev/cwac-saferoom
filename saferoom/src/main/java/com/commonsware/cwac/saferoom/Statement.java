@@ -11,58 +11,59 @@
 
 package com.commonsware.cwac.saferoom;
 
-import net.sqlcipher.database.SQLiteStatement;
 import androidx.sqlite.db.SupportSQLiteStatement;
+
+import net.zetetic.database.sqlcipher.SQLiteStatement;
 
 /**
  * SupportSQLiteStatement implementation that wraps SQLCipher for Android's
  * SQLiteStatement
  */
 class Statement extends Program implements SupportSQLiteStatement {
-  private final SQLiteStatement safeStatement;
+    private final SQLiteStatement safeStatement;
 
-  Statement(SQLiteStatement safeStatement) {
-    super(safeStatement);
-    this.safeStatement=safeStatement;
-  }
+    Statement(SQLiteStatement safeStatement) {
+        super(safeStatement);
+        this.safeStatement = safeStatement;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void execute() {
-    safeStatement.execute();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute() {
+        safeStatement.execute();
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int executeUpdateDelete() {
-    return safeStatement.executeUpdateDelete();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int executeUpdateDelete() {
+        return safeStatement.executeUpdateDelete();
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public long executeInsert() {
-    return safeStatement.executeInsert();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long executeInsert() {
+        return safeStatement.executeInsert();
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public long simpleQueryForLong() {
-    return safeStatement.simpleQueryForLong();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long simpleQueryForLong() {
+        return safeStatement.simpleQueryForLong();
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String simpleQueryForString() {
-    return safeStatement.simpleQueryForString();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String simpleQueryForString() {
+        return safeStatement.simpleQueryForString();
+    }
 }

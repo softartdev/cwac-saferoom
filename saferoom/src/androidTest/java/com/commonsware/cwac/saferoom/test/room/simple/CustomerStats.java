@@ -14,12 +14,13 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class CustomerStats {
-  public final int count;
-  public final String max;
+    public final int count;
+    public final String max;
 
-  public CustomerStats(int count, String max) {
-    this.count=count;
-    this.max=max;
-  }
+    public CustomerStats(int count, String max) {
+        this.count = count;
+        this.max = max;
+    }
 }

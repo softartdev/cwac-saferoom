@@ -46,7 +46,8 @@ class NoteViewModel(app: Application) : AndroidViewModel(app) {
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap { chars -> NoteRepository.load(app, chars) }
-                .subscribe({ note -> notes.post(note) },
+                .subscribe(
+                    { note -> notes.post(note) },
                     { t ->
                         if (t is UserNotAuthenticatedException) {
                             authEvents.postEvent(AuthCase.RETRY_LOAD)
@@ -58,14 +59,16 @@ class NoteViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun save(content: String) {
-        disposable.add(Observable.just(content)
+        disposable.add(
+            Observable.just(content)
             .map { NoteRepository.save(notes.value ?: EMPTY, it) }
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ note ->
-                savedEvents.postEvent(Unit)
-                notes.post(note)
-            },
+            .subscribe(
+                { note ->
+                    savedEvents.postEvent(Unit)
+                    notes.post(note)
+                },
                 { t ->
                     if (t is UserNotAuthenticatedException) {
                         authEvents.postEvent(AuthCase.RETRY_SAVE)

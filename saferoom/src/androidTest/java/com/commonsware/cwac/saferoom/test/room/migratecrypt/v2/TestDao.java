@@ -8,9 +8,10 @@ import java.util.List;
 
 @Dao
 public interface TestDao {
-  @Query("SELECT * FROM TestEntity")
-  List<TestEntity> loadAll();
+    @Query("SELECT * FROM TestEntity")
+    List<TestEntity> loadAll();
 
-  @Insert
-  void insert(TestEntity entity);
+    @Insert
+    @SuppressWarnings("unused")
+    void insert(TestEntity entity);
 }

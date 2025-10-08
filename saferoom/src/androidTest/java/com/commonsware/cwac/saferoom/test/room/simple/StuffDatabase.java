@@ -16,41 +16,41 @@ package com.commonsware.cwac.saferoom.test.room.simple;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
-import com.commonsware.cwac.saferoom.SafeHelperFactory;
+import android.util.Log;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.commonsware.cwac.saferoom.SafeHelperFactory;
+
 @Database(
-  entities={Customer.class, VersionedThingy.class, Category.class},
-  version=1
+        entities = {Customer.class, VersionedThingy.class, Category.class},
+        version = 1,
+        exportSchema = false
 )
 @TypeConverters({TypeTransmogrifier.class})
 abstract class StuffDatabase extends RoomDatabase {
-  abstract StuffStore stuffStore();
+    abstract StuffStore stuffStore();
 
-  static final String DB_NAME="stuff.db";
-  private static volatile StuffDatabase INSTANCE=null;
+    static final String DB_NAME = "stuff.db";
 
-  static StuffDatabase create(Context ctxt, boolean memoryOnly, boolean truncate) {
-    RoomDatabase.Builder<StuffDatabase> b;
+    @SuppressWarnings("SameParameterValue")
+    static StuffDatabase create(Context context, boolean memoryOnly, boolean truncate) {
+        RoomDatabase.Builder<StuffDatabase> b;
+        if (memoryOnly) {
+            b = Room.inMemoryDatabaseBuilder(context.getApplicationContext(), StuffDatabase.class);
+        } else {
+            b = Room.databaseBuilder(context.getApplicationContext(), StuffDatabase.class, DB_NAME);
+        }
+        if (truncate) {
+            // Note: setJournalMode may not be available in Room 2.8.1
+            // b.setJournalMode(JournalMode.TRUNCATE);
+            Log.d("StuffDatabase", "Truncate journal mode not set - API not available");
+        }
+        b.openHelperFactory(SafeHelperFactory.fromUser(new SpannableStringBuilder("sekrit")));
 
-    if (memoryOnly) {
-      b=Room.inMemoryDatabaseBuilder(ctxt.getApplicationContext(),
-        StuffDatabase.class);
+        return (b.build());
     }
-    else {
-      b=Room.databaseBuilder(ctxt.getApplicationContext(), StuffDatabase.class,
-        DB_NAME);
-    }
-
-    if (truncate) {
-      b.setJournalMode(JournalMode.TRUNCATE);
-    }
-
-    b.openHelperFactory(SafeHelperFactory.fromUser(new SpannableStringBuilder("sekrit")));
-
-    return(b.build());
-  }
 }

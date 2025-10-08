@@ -1,86 +1,97 @@
-apply plugin: 'com.android.library'
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
+plugins {
+    id 'com.android.library'
+    id 'com.vanniktech.maven.publish'
+}
 
 android {
-    compileSdkVersion 29
-
+    namespace "com.commonsware.cwac.saferoom"
+    compileSdkVersion 36
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion 23
+        targetSdkVersion 36
         testApplicationId "com.commonsware.cwac.saferoom.test"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         debug {
             testCoverageEnabled = true
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
-def roomVer="2.1.0"
-
 dependencies {
-    api "net.zetetic:android-database-sqlcipher:4.3.0@aar"
-    api "androidx.sqlite:sqlite:2.0.1"
+    api "net.zetetic:sqlcipher-android:4.10.0"
+    api "androidx.sqlite:sqlite:2.6.1"
+    def roomVer = "2.8.1"
     androidTestAnnotationProcessor "androidx.room:room-compiler:$roomVer"
-    androidTestImplementation "com.android.support.test:rules:1.0.2"
+    androidTestImplementation "androidx.test:rules:1.7.0"
+    androidTestImplementation "androidx.test.ext:junit:1.3.0"
+    androidTestImplementation "androidx.test:core:1.7.0"
     androidTestImplementation "com.commonsware.misc:support.db.tests.x:0.4.5"
     androidTestImplementation("androidx.room:room-runtime:$roomVer") {
         exclude group: 'androidx.annotation', module: 'annotation'
     }
-    androidTestImplementation "junit:junit:4.12"
+    androidTestImplementation "junit:junit:4.13.2"
 }
 
-if (project.hasProperty('PUBLISH_GROUP_ID')) {
-    // from http://stackoverflow.com/a/19484146/115145
-
-    android.libraryVariants.all { variant ->
-        def name = variant.buildType.name
-        if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
-            return; // Skip debug builds.
+// Maven Central Publishing Configuration
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    
+    // Only sign when publishing to Maven Central, not for local testing
+    if (project.gradle.startParameter.taskNames.any { it.contains("publishAndRelease") || it.contains("publish") && !it.contains("ToMavenLocal") }) {
+        signAllPublications()
+    }
+    
+    coordinates(PUBLISH_GROUP_ID, PUBLISH_ARTIFACT_ID, PUBLISH_VERSION)
+    
+    // Configure which Android variant to publish
+    configure(new AndroidSingleVariantLibrary("release", true, true))
+    
+    pom {
+        name = 'CWAC SafeRoom'
+        description = 'Room Integration with SQLCipher for Android'
+        inceptionYear = '2017'
+        url = 'https://github.com/softartdev/cwac-saferoom'
+        
+        licenses {
+            license {
+                name = 'The Apache Software License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'repo'
+            }
         }
-        def task = project.tasks.create "jar${name.capitalize()}", Jar
-        task.dependsOn variant.javaCompile
-        task.from variant.javaCompile.destinationDir
-        task.baseName = "cwac-${PUBLISH_ARTIFACT_ID}"
-        task.version = PUBLISH_VERSION
-        task.exclude('com/commonsware/cwac/**/BuildConfig.**')
-    }
-
-    task sourcesJar(type: Jar) {
-        from android.sourceSets.main.java.srcDirs
-        classifier = 'sources'
-    }
-
-    task javadoc(type: Javadoc) {
-        failOnError  false
-        source = android.sourceSets.main.java.sourceFiles
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    }
-
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
-
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
-    }
-
-    apply plugin: 'maven'
-
-    uploadArchives {
-        repositories.mavenDeployer {
-            pom.groupId = PUBLISH_GROUP_ID
-            pom.artifactId = PUBLISH_ARTIFACT_ID
-            pom.version = PUBLISH_VERSION
-
-            repository(url: LOCAL_REPO)
+        
+        developers {
+            developer {
+                id = 'commonsguy'
+                name = 'Mark Murphy'
+                email = 'mmurphy@commonsware.com'
+            }
+            developer {
+                id = 'softartdev'
+                name = 'Artur Babichev'
+                email = 'artik222012@gmail.com'
+            }
+        }
+        
+        scm {
+            url = 'https://github.com/softartdev/cwac-saferoom'
+            connection = 'scm:git:git://github.com/softartdev/cwac-saferoom.git'
+            developerConnection = 'scm:git:ssh://git@github.com/softartdev/cwac-saferoom.git'
         }
     }
 }
+
+// The vanniktech plugin handles signing internally with these properties:
+// - signing.keyId (from local.properties)
+// - signing.password (from local.properties)  
+// - signing.secretKeyRingFile (from local.properties)
+// It will automatically sign publications when signAllPublications() is called in mavenPublishing block

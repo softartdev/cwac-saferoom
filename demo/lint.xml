@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- Suppress icon duplicate warnings for launcher icons -->
+    <issue id="IconDuplicates" severity="ignore" />
+    <!-- Suppress unused resource warnings for launcher icons -->
+    <issue id="UnusedResources" severity="ignore" />
+    <!-- Suppress monochrome launcher icon warnings -->
+    <issue id="MonochromeLauncherIcon" severity="ignore" />
+</lint>

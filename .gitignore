@@ -1,8 +1,8 @@
 local.properties
+*.gpg
 *~
 .gradle/
 *.iml
 .idea/
-gradle.properties
 sync_docs
 build/

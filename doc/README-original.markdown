@@ -3,10 +3,12 @@
 This project implements the `SupportSQLite...` series of classes and interfaces
 that [Room](https://developer.android.com/topic/libraries/architecture/room.html)
 can use for working with a particular edition of SQLite. Specficially, this
-project's classes connect Room with [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/),
+project's classes connect Room
+with [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/),
 a version of SQLite that offers transparent encryption of its contents.
 
-**NOTE**: SQLCipher for Android has its own implementation of the `SupportSQLite...` classes and interfaces.
+**NOTE**: SQLCipher for Android has its own implementation of the `SupportSQLite...` classes and
+interfaces.
 Please consider using SQLCipher for Android directly, rather than using SafeRoom.
 
 ## Notable Forks
@@ -58,10 +60,10 @@ one that you supplied as a Java class object to the
 To use SafeRoom, on the `RoomDatabase.Builder`, before calling `build()`:
 
 - Create an instance of `com.commonsware.cwac.saferoom.SafeHelperFactory`,
-passing in the passphrase to use
+  passing in the passphrase to use
 
 - Pass that `SafeHelperFactory` to the `RoomDatabase.Builder` via the
-`openHelperFactory()` method
+  `openHelperFactory()` method
 
 ```java
 // EditText passphraseField;
@@ -107,20 +109,20 @@ of the database, then delete the unencrypted one and rename the copy to
 the original name. There are five versions of `encrypt()`:
 
 - `encrypt(Context, String, Editable)` where the `String` is the database
-name and the `Editable` is the passphrase (e.g., from `getText()` on
-an `EditText`)
+  name and the `Editable` is the passphrase (e.g., from `getText()` on
+  an `EditText`)
 
 - `encrypt(Context, String, char[])` where the `String` is the database
-name and the `char[]` is the passphrase
+  name and the `char[]` is the passphrase
 
 - `encrypt(Context, File, char[])` where the `File` points to the database
-and the `char[]` is the passphrase
+  and the `char[]` is the passphrase
 
 - `encrypt(Context, String, byte[])` where the `String` is the database
-name and the `byte[]` is the passphrase
+  name and the `byte[]` is the passphrase
 
 - `encrypt(Context, File, byte[])` where the `File` points to the database
-and the `byte[]` is the passphrase
+  and the `byte[]` is the passphrase
 
 The passphrase is left untouched by `encrypt()`, so you can turn around and
 use it with `SafeHelperFactory`. If you are not planning on opening the database,
@@ -137,7 +139,7 @@ If you want to change the passphrase for an existing database:
 - Open it in writeable mode
 
 - Call `SafeHelperFactory.rekey()`, supplying that database plus either a
-`char[]` or an `Editable` reflecting the new passphrase to use
+  `char[]` or an `Editable` reflecting the new passphrase to use
 
 Note that this does *not* encrypt an unencrypted database. Use the `encrypt()`
 option listed above for that.
@@ -203,7 +205,8 @@ database will have already been migrated.
 
 ## Support for Pre-Key and Post-Key SQL
 
-SQLCipher for Android supports [a number of custom `PRAGMA`s](https://www.zetetic.net/sqlcipher/sqlcipher-api/)
+SQLCipher for Android supports [a number of custom
+`PRAGMA`s](https://www.zetetic.net/sqlcipher/sqlcipher-api/)
 for configuring the encryption, such as the number of PBKDF2 iterations to use for
 key stretching. Some of that SQL needs to be performed at specific times with respect
 to opening the database.
@@ -239,7 +242,7 @@ between the time you create the factory and when you try opening the database (d
 or indirectly). By default, `SafeHelperFactory` clears out that cached passphrase,
 so the plaintext passphrase is not held in memory any longer than it has to. However,
 this means that attempting to reuse the `SafeHelperFactory`, and open the database
-again after closing it, will fail. 
+again after closing it, will fail.
 
 However, it is possible that you are using code that opens and closes the database
 on its own, and you do not control the timing of that work. If so, you can opt
@@ -342,8 +345,10 @@ set of classes.
 
 If you have questions regarding the use of this code, please post a question
 on [Stack Overflow](http://stackoverflow.com/questions/ask) tagged with
-`commonsware-cwac` and `android` after [searching to see if there already is an answer](https://stackoverflow.com/search?q=[commonsware-cwac]+saferoom). Be sure to indicate
-what CWAC module you are having issues with, and be sure to include source code 
+`commonsware-cwac` and `android`
+after [searching to see if there already is an answer](https://stackoverflow.com/search?q=[commonsware-cwac]+saferoom).
+Be sure to indicate
+what CWAC module you are having issues with, and be sure to include source code
 and stack traces if you are encountering crashes.
 
 If you have encountered what is clearly a bug, or if you have a feature request,
@@ -383,10 +388,12 @@ of guidance here.
 - v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
-- v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
+- v1.0.1: changed `SQLCipherUtils`
+  per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
     - Upgraded to SQLCipher for Android 4.0.1
-    - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
+    - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException`
+      if the database to encrypt/decrypt is not found
 - v0.5.1: added more synchronization
 - v0.5.0: released AndroidX edition
 
@@ -402,25 +409,31 @@ of guidance here.
 - v1.0.4: added support for `byte[]` passphrases to `SQLCipherUtils`
 - v1.0.3: added support for `byte[]` passphrases
 - v1.0.2: upgraded to SQLCipher for Android 4.1.3
-- v1.0.1: changed `SQLCipherUtils` per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
+- v1.0.1: changed `SQLCipherUtils`
+  per [issue #45](https://github.com/commonsguy/cwac-saferoom/issues/45)
 - v1.0.0:
     - Upgraded to SQLCipher for Android 4.0.1
-    - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException` if the database to encrypt/decrypt is not found
+    - `SQLCipherUtils.encrypt()` and `SQLCipherUtils.decrypt()` will throw `FileNotFoundException`
+      if the database to encrypt/decrypt is not found
 - v0.4.5: added more synchronization
 - v0.4.4: addressed [thread-safety issue](https://github.com/commonsguy/cwac-saferoom/issues/27)
 - v0.4.3: bumped `android.arch.persistence:db` dependency to `1.1.1`
 - v0.4.2: fixed [edge case WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/23)
-- v0.4.1: added Room-specific tests, fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
+- v0.4.1: added Room-specific tests,
+  fixed [WAL issue](https://github.com/commonsguy/cwac-saferoom/issues/17)
 - v0.4.0: updated to `1.1.0` of the support database API
 - v0.3.4: changed non-WAL journal mode to TRUNCATE
-- v0.3.3: added WAL support, with an assist from [plackemacher](https://github.com/commonsguy/cwac-saferoom/pull/20)
+- v0.3.3: added WAL support, with an assist
+  from [plackemacher](https://github.com/commonsguy/cwac-saferoom/pull/20)
 - v0.3.2: added `decrypt()` utility method
 - v0.3.1: changed `rekey()` to use the existing `changePassword()`
 - v0.3.0: added `rekey()`, upgraded to SQLCipher for Android 3.5.9, replaced tests
 - v0.2.1: added temporary implementation of `getDatabaseName()` to `Helper`
-- v0.2.0: added `SQLCipherUtils` to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
+- v0.2.0: added `SQLCipherUtils`
+  to [help encrypt existing databases](https://github.com/commonsguy/cwac-saferoom/issues/6)
 - v0.1.3: upgraded to Android Gradle Plugin 3.0.0, set transitive dependencies to `api`
-- v0.1.2: fixed [issue #3](https://github.com/commonsguy/cwac-saferoom/issues/3), related to closing statements
+- v0.1.2: fixed [issue #3](https://github.com/commonsguy/cwac-saferoom/issues/3), related to closing
+  statements
 - v0.1.1: updated support database dependency to `1.0.0`
 - v0.1.0: eliminated Room dependency
 - v0.0.4: raised Room dependencies to `1.0.0-beta1` and SQLCipher for Android to `3.5.7`

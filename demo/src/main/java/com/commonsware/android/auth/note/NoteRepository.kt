@@ -23,7 +23,7 @@ import com.commonsware.cwac.saferoom.SafeHelperFactory
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
-import java.util.*
+import java.util.Arrays
 
 private const val SCHEMA = 1
 private const val DATABASE_NAME = "note.db"
@@ -43,24 +43,20 @@ class NoteRepository private constructor(ctxt: Context, passphrase: CharArray) {
                     db.execSQL("CREATE TABLE note (_id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT);")
                 }
 
-                override fun onUpgrade(
-                    db: SupportSQLiteDatabase, oldVersion: Int,
-                    newVersion: Int
-                ) {
+                override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
                     throw RuntimeException("How did we get here?")
                 }
             })
-
         db = factory.create(cfgBuilder.build()).writableDatabase
     }
 
-    private class LoadObservable(ctxt: Context, private val passphrase: CharArray) : ObservableOnSubscribe<Note> {
+    private class LoadObservable(ctxt: Context, private val passphrase: CharArray) :
+        ObservableOnSubscribe<Note> {
         private val app: Context = ctxt.applicationContext
 
         @Throws(Exception::class)
         override fun subscribe(e: ObservableEmitter<Note>) {
-            val c = NoteRepository.init(app, passphrase).db.query("SELECT _id, content FROM note")
-
+            val c = init(app, passphrase).db.query("SELECT _id, content FROM note")
             if (c.isAfterLast) {
                 e.onNext(EMPTY)
             } else {
@@ -68,7 +64,6 @@ class NoteRepository private constructor(ctxt: Context, passphrase: CharArray) {
                 e.onNext(Note(c.getLong(0), c.getString(1)))
                 Arrays.fill(passphrase, '\u0000')
             }
-
             c.close()
         }
     }
@@ -79,7 +74,8 @@ class NoteRepository private constructor(ctxt: Context, passphrase: CharArray) {
 
         @Synchronized
         private fun init(ctxt: Context, passphrase: CharArray): NoteRepository {
-            return INSTANCE ?: NoteRepository(ctxt.applicationContext, passphrase).apply { INSTANCE = this }
+            return INSTANCE ?: NoteRepository(ctxt.applicationContext, passphrase)
+                .apply { INSTANCE = this }
         }
 
         @Synchronized
@@ -97,15 +93,16 @@ class NoteRepository private constructor(ctxt: Context, passphrase: CharArray) {
             cv.put("content", content)
 
             return if (note === EMPTY) {
-                val id = NoteRepository.get().db.insert("note", SQLiteDatabase.CONFLICT_ABORT, cv)
-
+                val id = get().db.insert("note", SQLiteDatabase.CONFLICT_ABORT, cv)
                 Note(id, content)
             } else {
-                NoteRepository.get().db.update(
-                        "note", SQLiteDatabase.CONFLICT_REPLACE, cv, "_id=?",
-                        arrayOf(note.id.toString())
-                    )
-
+                get().db.update(
+                    table = "note",
+                    conflictAlgorithm = SQLiteDatabase.CONFLICT_REPLACE,
+                    values = cv,
+                    whereClause = "_id=?",
+                    whereArgs = arrayOf(note.id.toString())
+                )
                 Note(note.id, content)
             }
         }

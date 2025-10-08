@@ -14,23 +14,36 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
-import java.util.List;
 import androidx.room.Relation;
 
+import java.util.List;
+
 public class CategoryTuple {
-  public final String id;
-  public final String title;
-  public final String parentId;
+    public final String id;
+    public final String title;
+    public final String parentId;
 
-  public CategoryTuple(String id, String title, String parentId) {
-    this.id=id;
-    this.title=title;
-    this.parentId=parentId;
-  }
+    public CategoryTuple(String id, String title, String parentId) {
+        this.id = id;
+        this.title = title;
+        this.parentId = parentId;
+    }
+    
+    @SuppressWarnings("unused")
+    public String getTitle() {
+        return title;
+    }
+    
+    @SuppressWarnings("unused")
+    public String getParentId() {
+        return parentId;
+    }
 
-  @Relation(parentColumn="id", entityColumn="parentId")
-  public List<Category> children;
+    /** @noinspection ClassEscapesDefinedScope*/
+    @Relation(parentColumn = "id", entityColumn = "parentId")
+    public List<Category> children;
 
-  @Relation(parentColumn="parentId", entityColumn="id")
-  public List<Category> parents;
+    /** @noinspection ClassEscapesDefinedScope*/
+    @Relation(parentColumn = "parentId", entityColumn = "id")
+    public List<Category> parents;
 }

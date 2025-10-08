@@ -14,9 +14,6 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
 import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Entity;
@@ -24,35 +21,37 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices={@Index(value="postalCode", unique=true)})
+import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
+
+@Entity(indices = {@Index(value = "postalCode", unique = true)})
 class Customer {
-  @PrimaryKey
-  @NonNull
-  public final String id;
+    @PrimaryKey
+    @NonNull
+    public final String id;
 
-  public final String postalCode;
-  public final String displayName;
-  public final Date creationDate;
+    public final String postalCode;
+    public final String displayName;
+    public final Date creationDate;
 
-  @Embedded
-  public final LocationColumns officeLocation;
+    @Embedded
+    public final LocationColumns officeLocation;
 
-  public final Set<String> tags;
+    public final Set<String> tags;
 
-  @Ignore
-  Customer(String postalCode, String displayName, LocationColumns officeLocation,
-           Set<String> tags) {
-    this(UUID.randomUUID().toString(), postalCode, displayName, new Date(),
-      officeLocation, tags);
-  }
+    @Ignore
+    @SuppressWarnings("SameParameterValue")
+    Customer(String postalCode, String displayName, LocationColumns officeLocation, Set<String> tags) {
+        this(UUID.randomUUID().toString(), postalCode, displayName, new Date(), officeLocation, tags);
+    }
 
-  Customer(String id, String postalCode, String displayName, Date creationDate,
-           LocationColumns officeLocation, Set<String> tags) {
-    this.id=id;
-    this.postalCode=postalCode;
-    this.displayName=displayName;
-    this.creationDate=creationDate;
-    this.officeLocation=officeLocation;
-    this.tags=tags;
-  }
+    Customer(@NonNull String id, String postalCode, String displayName, Date creationDate, LocationColumns officeLocation, Set<String> tags) {
+        this.id = id;
+        this.postalCode = postalCode;
+        this.displayName = displayName;
+        this.creationDate = creationDate;
+        this.officeLocation = officeLocation;
+        this.tags = tags;
+    }
 }

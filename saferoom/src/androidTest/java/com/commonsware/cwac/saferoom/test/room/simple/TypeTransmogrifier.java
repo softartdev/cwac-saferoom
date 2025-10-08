@@ -18,6 +18,9 @@ import android.location.Location;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
+
+import androidx.room.TypeConverter;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -25,103 +28,102 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import androidx.room.TypeConverter;
 
 public class TypeTransmogrifier {
-  private static final String TAG="TypeTransmogrifier";
+    private static final String TAG = "TypeTransmogrifier";
 
-  @TypeConverter
-  public static Long fromDate(Date date) {
-    if (date==null) {
-      return(null);
+    @TypeConverter
+    public static Long fromDate(Date date) {
+        if (date == null) {
+            return (null);
+        }
+
+        return (date.getTime());
     }
 
-    return(date.getTime());
-  }
+    @TypeConverter
+    public static Date toDate(Long millisSinceEpoch) {
+        if (millisSinceEpoch == null) {
+            return (null);
+        }
 
-  @TypeConverter
-  public static Date toDate(Long millisSinceEpoch) {
-    if (millisSinceEpoch==null) {
-      return(null);
+        return (new Date(millisSinceEpoch));
     }
 
-    return(new Date(millisSinceEpoch));
-  }
+    @TypeConverter
+    @SuppressWarnings("unused")
+    public static String fromLocation(Location location) {
+        if (location == null) {
+            return (null);
+        }
 
-  @TypeConverter
-  public static String fromLocation(Location location) {
-    if (location==null) {
-      return(null);
+        return (String.format(Locale.US, "%f,%f", location.getLatitude(),
+                location.getLongitude()));
     }
 
-    return(String.format(Locale.US, "%f,%f", location.getLatitude(),
-      location.getLongitude()));
-  }
+    @TypeConverter
+    @SuppressWarnings("unused")
+    public static Location toLocation(String latlon) {
+        if (latlon == null) {
+            return (null);
+        }
 
-  @TypeConverter
-  public static Location toLocation(String latlon) {
-    if (latlon==null) {
-      return(null);
+        String[] pieces = latlon.split(",");
+        Location result = new Location("");
+
+        result.setLatitude(Double.parseDouble(pieces[0]));
+        result.setLongitude(Double.parseDouble(pieces[1]));
+
+        return (result);
     }
 
-    String[] pieces=latlon.split(",");
-    Location result=new Location("");
+    @TypeConverter
+    public static String fromStringSet(Set<String> strings) {
+        if (strings == null) {
+            return (null);
+        }
 
-    result.setLatitude(Double.parseDouble(pieces[0]));
-    result.setLongitude(Double.parseDouble(pieces[1]));
+        StringWriter result = new StringWriter();
+        JsonWriter json = new JsonWriter(result);
 
-    return(result);
-  }
+        try {
+            json.beginArray();
 
-  @TypeConverter
-  public static String fromStringSet(Set<String> strings) {
-    if (strings==null) {
-      return(null);
+            for (String s : strings) {
+                json.value(s);
+            }
+
+            json.endArray();
+            json.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Exception creating JSON", e);
+        }
+
+        return (result.toString());
     }
 
-    StringWriter result=new StringWriter();
-    JsonWriter json=new JsonWriter(result);
+    @TypeConverter
+    public static Set<String> toStringSet(String strings) {
+        if (strings == null) {
+            return (null);
+        }
 
-    try {
-      json.beginArray();
+        StringReader reader = new StringReader(strings);
+        JsonReader json = new JsonReader(reader);
+        HashSet<String> result = new HashSet<>();
 
-      for (String s : strings) {
-        json.value(s);
-      }
+        try {
+            json.beginArray();
 
-      json.endArray();
-      json.close();
+            while (json.hasNext()) {
+                result.add(json.nextString());
+            }
+
+            json.endArray();
+        } catch (IOException e) {
+            Log.e(TAG, "Exception parsing JSON", e);
+        }
+
+        return (result);
     }
-    catch (IOException e) {
-      Log.e(TAG, "Exception creating JSON", e);
-    }
-
-    return(result.toString());
-  }
-
-  @TypeConverter
-  public static Set<String> toStringSet(String strings) {
-    if (strings==null) {
-      return(null);
-    }
-
-    StringReader reader=new StringReader(strings);
-    JsonReader json=new JsonReader(reader);
-    HashSet<String> result=new HashSet<>();
-
-    try {
-      json.beginArray();
-
-      while (json.hasNext()) {
-        result.add(json.nextString());
-      }
-
-      json.endArray();
-    }
-    catch (IOException e) {
-      Log.e(TAG, "Exception parsing JSON", e);
-    }
-
-    return(result);
-  }
 }

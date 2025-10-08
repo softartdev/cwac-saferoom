@@ -14,14 +14,16 @@
 
 package com.commonsware.cwac.saferoom.test.room.simple;
 
-import java.util.List;
 import androidx.room.Relation;
 
-public class CategoryShadow extends Category {
-  public CategoryShadow(String id, String title, String parentId) {
-    super(id, title, parentId);
-  }
+import java.util.List;
 
-  @Relation(parentColumn="id", entityColumn="parentId")
-  public List<Category> children;
+public class CategoryShadow extends Category {
+    public CategoryShadow(String id, String title, String parentId) {
+        super(id, title, parentId);
+    }
+
+    /** @noinspection ClassEscapesDefinedScope*/
+    @Relation(parentColumn = "id", entityColumn = "parentId")
+    public List<Category> children;
 }

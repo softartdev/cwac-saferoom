@@ -5,12 +5,13 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
+@SuppressWarnings("ClassCanBeRecord")
 public class TestEntity {
-  @PrimaryKey
-  @NonNull
-  public final String id;
+    @PrimaryKey
+    @NonNull
+    public final String id;
 
-  public TestEntity(String id) {
-    this.id = id;
-  }
+    public TestEntity(@NonNull String id) {
+        this.id = id;
+    }
 }
