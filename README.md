@@ -2,6 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.softartdev/saferoom.x.svg)](https://central.sonatype.com/artifact/io.github.softartdev/saferoom.x)
 [![Build CI](https://github.com/softartdev/cwac-saferoom/actions/workflows/build_only.yml/badge.svg)](https://github.com/softartdev/cwac-saferoom/actions/workflows/build_only.yml)
+[![Build & Publish CI/CD](https://github.com/softartdev/cwac-saferoom/actions/workflows/build_publish.yml/badge.svg)](https://github.com/softartdev/cwac-saferoom/actions/workflows/build_publish.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 > **📢 Note**: This is a maintained fork of the original [CWAC-SafeRoom](https://github.com/commonsguy/cwac-saferoom) library, which is no longer actively maintained. This fork has been updated to work with the new [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/) API (`net.zetetic:sqlcipher-android`) that replaced the older `android-database-sqlcipher` library.
@@ -21,7 +22,7 @@ Add the dependency to your app's `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation 'io.github.softartdev:saferoom.x:1.3.1'
+    implementation 'io.github.softartdev:saferoom.x:1.4.0' // check last version in Maven Central badge
 }
 ```
 
@@ -84,7 +85,8 @@ SQLCipher for Android now has its own implementation of the `SupportSQLite...` c
 
 ## 🔗 Links
 
-- **Maven Central**: https://central.sonatype.com/artifact/io.github.softartdev/saferoom.x
+- **Maven Central Artifact**: https://central.sonatype.com/artifact/io.github.softartdev/saferoom.x
+- **Maven Repository**: https://repo1.maven.org/maven2/io/github/softartdev/saferoom.x/
 - **GitHub Repository**: https://github.com/softartdev/cwac-saferoom
 - **Original Repository**: https://github.com/commonsguy/cwac-saferoom
 - **Issues**: https://github.com/softartdev/cwac-saferoom/issues

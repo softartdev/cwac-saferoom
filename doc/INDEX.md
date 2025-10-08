@@ -12,11 +12,14 @@ This directory contains all documentation for the CWAC SafeRoom library, includi
 
 - **[Main README](../README.md)** - Project overview and installation instructions
 - **[Original Usage Guide](README-original.markdown)** - Detailed usage instructions and examples
-- **[Version 1.0.0 Release Notes](README-1.0.0.md)** - Release notes for version 1.0.0
+- **[Version 1.4.0 Release Notes](RELEASE-1.4.0.md)** - Latest release notes
+- **[Version 1.0.0 Release Notes](README-1.0.0.md)** - Historical release notes
 
 ### For Publishers & Maintainers
 
 - **[SUMMARY](SUMMARY.md)** ⭐ **START HERE** - Complete overview of the Maven Central publishing setup
+- **[Publication Fix](PUBLICATION_FIX.md)** 🔧 **LATEST** - CI/CD signing issue fix and verification
+- **[CI/CD Fix Details](CI_CD_FIX.md)** - Detailed analysis of the signing configuration fix
 - **[Publishing Guide](PUBLISHING.md)** - Step-by-step publishing instructions
 - **[Maven Central Setup](MAVEN_CENTRAL_SETUP.md)** - Detailed Maven Central configuration and verification
 - **[GitHub Actions Setup](GITHUB_ACTIONS_SETUP.md)** - CI/CD configuration and workflow details
@@ -72,17 +75,17 @@ implementation 'io.github.softartdev:saferoom.x:1.3.1'
 
 ```
 cwac-saferoom/
-├── README.md                    # Main project README
-├── README-original.markdown     # Original usage guide
+├── README.md                       # Main project README
 └── doc/
-    ├── INDEX.md                 # This file
-    ├── SUMMARY.md              # ⭐ Complete setup overview
-    ├── PUBLISHING.md           # Publishing instructions
-    ├── MAVEN_CENTRAL_SETUP.md  # Maven Central configuration
-    ├── GITHUB_ACTIONS_SETUP.md # CI/CD configuration
-    ├── CONTRIBUTING.md         # Contribution guidelines
-    ├── SUPPORT.md              # Support information
-    └── README-1.0.0.md        # Version 1.0.0 release notes
+    ├── INDEX.md                    # This file
+    ├── SUMMARY.md                  # ⭐ Complete setup overview
+    ├── PUBLISHING.md               # Publishing instructions
+    ├── MAVEN_CENTRAL_SETUP.md      # Maven Central configuration
+    ├── GITHUB_ACTIONS_SETUP.md     # CI/CD configuration
+    ├── CONTRIBUTING.md             # Contribution guidelines
+    ├── SUPPORT.md                  # Support information
+    ├── README-1.0.0.md             # Version 1.0.0 release notes
+    └── README-original.markdown    # Original usage guide
 ```
 
 ---
